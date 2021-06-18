@@ -1,4 +1,4 @@
-import { getActiveState, getNextElement, getTask, JSMD } from "./JSMD"
+import { getActiveState, getNextElement, getTask, JSMD } from "."
 
 const jsmd: JSMD = {
     steps: [],

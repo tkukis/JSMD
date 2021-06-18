@@ -1,4 +1,4 @@
-import { decide } from "./JSMD"
+import { decide } from "."
 
 describe("decide", () => {
     test('simple', async () => {

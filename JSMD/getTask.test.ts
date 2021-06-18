@@ -1,4 +1,4 @@
-import { assignTask, getTask, JSMD } from "./JSMD"
+import { getTask, JSMD } from "."
 
 const jsmd: JSMD = {
     steps: [],
@@ -25,17 +25,25 @@ const jsmd: JSMD = {
         { start: "b", end: "c" },
     ]
 }
-const user = { id: "tomas" }
-describe("API", () => {
-    test('start', async () => {
-        //let flow = assignTask(jsmd, user.id, 0, user)
-        //@ts-ignore
-        //expect(getTask(flow).id).toBe(0)
-        //@ts-ignore
-        //expect(getTask(flow).assignee).toBe("tomas")
-      //  flow = assignTask(flow, user.id, 0, { ...user, id: "petras" })
-        //@ts-ignore
-        //expect(getTask(flow).assignee).toBe("petras")
 
+describe("getTask", () => {
+    test('start', async () => {
+        //@ts-ignore
+        expect(getTask(jsmd)?.id).toBe(0)
+
+        expect(getTask({
+            ...jsmd, steps: [
+                { userId: 'tomas', type: 'assign', data: { id: "tomas" } }
+            ]
+            //@ts-ignore
+        })?.id).toBe(0)
+        return
+        expect(getTask({
+            ...jsmd, steps: [
+                { userId: 'tomas', type: 'assign', data: { id: "tomas" } },
+                { userId: 'tomas', type: 'submit', data: { some: "A" } }
+            ]
+            //@ts-ignore
+        })?.id).toBe(1)
     })
 })

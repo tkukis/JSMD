@@ -1,4 +1,4 @@
-import { AppUser, assignTask, getActiveState, getElementById, GetTask, getTask, JSMD, submitTask, submitTask_ERRORS } from "./JSMD"
+import { AppUser, assignTask, getActiveState, getElementById, GetTask, getTask, JSMD, submitTask, submitTask_ERRORS } from "."
 
 const jsmd: JSMD = {
     steps: [
