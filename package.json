@@ -1,5 +1,5 @@
 {
-  "name": "camunda",
+  "name": "jbmn",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "test": "NODE_ENV=test jest",
     "test:watch": "NODE_ENV=test npx jest --watch"
   },
-  "author": "",
+  "author": "Tomas Kukis",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",

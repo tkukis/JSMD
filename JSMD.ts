@@ -10,6 +10,16 @@ export interface Connector {
     condition?: string
     end: string
 }
+
+interface FlowElement {
+    id: string,
+    type: string,
+    assignee?: string
+    assigneeType: {
+        id: string,
+        type?: string
+    }
+}
 export interface JSMD {
     steps: Array<{
         type: string,
@@ -17,20 +27,13 @@ export interface JSMD {
         action?: string,
         userId: string
     }>,
-    elements: Array<{
-        id: string,
-        type: string,
-        assignee?: string
-        assigneeType: {
-            id: string,
-            type?: string
-        }
-    }>,
+    elements: Array<FlowElement>,
     connectors: Array<Connector>
 }
 
 export interface AppUser {
     id: string,
+    permissions?: Array<string>
 }
 export function decide(expr: string, state: any) {
     try {
@@ -54,33 +57,72 @@ export function getNextElement(state: any, connectors: Array<Connector>, current
     }
     return candidates.find(c => !c.condition)?.end
 }
+
+export function getElementById(jsmd: JSMD, id: string) {
+    return jsmd.elements.find(element => element.id === id)
+}
 export function getActiveState(jsmd: JSMD) {
     const submits = jsmd.steps.filter(s => s.type === STEP_TYPE.submit)
     return submits.reduce(function (total, current, i) {
-        total.state[total.activeElement] = { data: current.data, action: current.action }
-        const next = getNextElement(total.state, jsmd.connectors, total.activeElement)
-        return { state: total.state, activeElement: next }
-    }, { state: {}, activeElement: jsmd.elements[0].id })
+        total.state[total.activeElementId] = { data: current.data, action: current.action }
+        const next = getNextElement(total.state, jsmd.connectors, total.activeElementId)
+        return { state: total.state, activeElementId: next }
+    }, { state: {}, activeElementId: jsmd.elements[0].id })
 }
 
-export function getTask(jsmd: JSMD): { id: Number, assignee: string | undefined } | void {
-    const assigns = jsmd.steps.filter(s => s.type === STEP_TYPE.assign)
-    if (assigns.length === 0) {
-        return { id: 0, assignee: undefined }
+export interface GetTask {
+    id: number,
+    assignee: string | undefined,
+    state: any,
+    element: any
+}
+export function getTask(jsmd: JSMD): GetTask | void {
+    const activeState = getActiveState(jsmd)
+    if (!activeState.activeElementId) {
+        return null
     }
-    return { id: 0, assignee: assigns[assigns.length - 1].data.id }
-}
-export function getValue() {
+    const id = jsmd.steps.filter(s => s.type !== STEP_TYPE.assign).length
+    const assigns = jsmd.steps.filter(s => s.type === STEP_TYPE.assign)
+    const assignee = jsmd.steps.reduce((prev, current, i) => {
+        if (current.type === STEP_TYPE.submit) {
+            return null
+        }
+        return current?.data?.id
+    }, null)
 
+    return { id, assignee, state: activeState.state, element: getElementById(jsmd, activeState.activeElementId) }
 }
-export function assignTask(jsmd: JSMD, userId: string, taskId: number, assignee: AppUser): JSMD {
+
+export enum AssigneType {
+    permission = "permission"
+}
+export function assignTask(jsmd: JSMD, user: AppUser, taskIndex: number, assignee: AppUser): JSMD | string {
+
     const flow: JSMD = JSON.parse(JSON.stringify(jsmd))
     const steps = flow.steps
-    flow.steps = [...steps, { userId, type: STEP_TYPE.assign, data: { id: assignee.id } }]
+    flow.steps = [...steps, { userId: user.id, type: STEP_TYPE.assign, data: { id: assignee.id } }]
     return flow
 
 }
-export function submitTask(jsmd: JSMD, userId, taskId: number, data: any, action: string) {
+export enum submitTask_ERRORS {
+    FLOW_IS_OVER = "flow is over",
+    TASK_IS_OVER = "task is over",
+    WRONG_ASSIGNEE = "wrong assignee"
+}
+
+export function submitTask(jsmd: JSMD, userId, taskId: number, data: any, action: string): JSMD | string {
+    const _currentTask = getTask(jsmd)
+    if (!_currentTask) {
+        return submitTask_ERRORS.FLOW_IS_OVER
+    }
+    const currentTask = (<GetTask>_currentTask)
+    if (currentTask.id !== taskId) {
+        return submitTask_ERRORS.TASK_IS_OVER
+    }
+    if (userId !== currentTask.assignee) {
+        return submitTask_ERRORS.WRONG_ASSIGNEE
+    }
+
     const flow: JSMD = JSON.parse(JSON.stringify(jsmd))
     const steps = flow.steps
     flow.steps = [...steps, { userId, type: STEP_TYPE.submit, data, action }]

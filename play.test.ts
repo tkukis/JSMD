@@ -28,14 +28,14 @@ const jsmd: JSMD = {
 const user = { id: "tomas" }
 describe("API", () => {
     test('start', async () => {
-        let flow = assignTask(jsmd, user.id, 0, user)
+        //let flow = assignTask(jsmd, user.id, 0, user)
         //@ts-ignore
-        expect(getTask(flow).id).toBe(0)
+        //expect(getTask(flow).id).toBe(0)
         //@ts-ignore
-        expect(getTask(flow).assignee).toBe("tomas")
-        flow = assignTask(flow, user.id, 0, { ...user, id: "petras" })
+        //expect(getTask(flow).assignee).toBe("tomas")
+      //  flow = assignTask(flow, user.id, 0, { ...user, id: "petras" })
         //@ts-ignore
-        expect(getTask(flow).assignee).toBe("petras")
+        //expect(getTask(flow).assignee).toBe("petras")
 
     })
 })

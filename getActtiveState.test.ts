@@ -95,7 +95,7 @@ describe("getTask", () => {
     test('init', async () => {
         //@ts-ignore
         const state = getActiveState(jsmd)
-        expect(state.activeElement).toBe("a")
+        expect(state.activeElementId).toBe("a")
         expect(state.state).toStrictEqual({})
     })
     test('step b', async () => {
@@ -105,7 +105,7 @@ describe("getTask", () => {
                 { data: {}, action: "ok", userId: "tomas", type: "submit" }
             ]
         })
-        expect(state.activeElement).toBe("b")
+        expect(state.activeElementId).toBe("b")
         //   expect(state.state).toStrictEqual({})
     })
     test('step c', async () => {
@@ -116,7 +116,7 @@ describe("getTask", () => {
                 { data: {}, action: "ok", userId: "tomas", type: "submit" }
             ]
         })
-        expect(state.activeElement).toBe("c")
+        expect(state.activeElementId).toBe("c")
         //   expect(state.state).toStrictEqual({})
     })
     test('ended', async () => {
@@ -128,7 +128,7 @@ describe("getTask", () => {
                 { data: {}, action: "ok", userId: "tomas", type: "submit" }
             ]
         })
-        expect(state.activeElement).toBe(undefined)
+        expect(state.activeElementId).toBe(undefined)
         //   expect(state.state).toStrictEqual({})
     })
     test('simpleCondition', async () => {
@@ -139,7 +139,7 @@ describe("getTask", () => {
 
             ]
         })
-        expect(state.activeElement).toBe("c")
+        expect(state.activeElementId).toBe("c")
     })
     test('simpleCondition a', async () => {
         //@ts-ignore
@@ -149,7 +149,7 @@ describe("getTask", () => {
 
             ]
         })
-        expect(state.activeElement).toBe("b")
+        expect(state.activeElementId).toBe("b")
     })
     test('simpleCondition c', async () => {
         //@ts-ignore
@@ -160,7 +160,7 @@ describe("getTask", () => {
 
             ]
         })
-        expect(state.activeElement).toBe("c")
+        expect(state.activeElementId).toBe("c")
     })
     test('simpleCondition c', async () => {
         //@ts-ignore
@@ -172,7 +172,7 @@ describe("getTask", () => {
 
             ]
         })
-        expect(state.activeElement).toBe("a")
+        expect(state.activeElementId).toBe("a")
     })
     test('simpleCondition c', async () => {
         //@ts-ignore
@@ -185,7 +185,7 @@ describe("getTask", () => {
 
             ]
         })
-        expect(state.activeElement).toBe("b")
+        expect(state.activeElementId).toBe("b")
     })
     test('simpleCondition c', async () => {
         //@ts-ignore
@@ -198,7 +198,7 @@ describe("getTask", () => {
                 { data: {}, action: "ok", userId: "tomas", type: "submit" },
             ]
         })
-        expect(state.activeElement).toBe("c")
+        expect(state.activeElementId).toBe("c")
     })
     test('simpleCondition end', async () => {
         //@ts-ignore
@@ -212,7 +212,7 @@ describe("getTask", () => {
                 { data: {}, action: "ok", userId: "tomas", type: "submit" },
             ]
         })
-        expect(state.activeElement).toBe(undefined)
+        expect(state.activeElementId).toBe(undefined)
     })
 
 })
