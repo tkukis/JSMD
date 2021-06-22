@@ -14,6 +14,7 @@ export interface Connector {
 export interface FlowElement {
     id: string,
     type: string,
+    form?: string,
     flowStatus?: string,
     assignee?: string
     assigneeType: {
@@ -74,7 +75,12 @@ export function getStatus(jsmd: JSMD, activeElementId: string | undefined) {
     return "completed"
 }
 
-export function getActiveState(jsmd: JSMD) {
+export interface ActiveState {
+    status: string,
+    state: any,
+    activeElementId: string | undefined
+}
+export function getActiveState(jsmd: JSMD): ActiveState {
     const submits = jsmd.steps.filter(s => s.type === STEP_TYPE.submit)
     const state = submits.reduce(function (total, current, i) {
         total.state[total.activeElementId] = { data: current.data, action: current.action }

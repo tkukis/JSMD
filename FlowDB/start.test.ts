@@ -1,4 +1,4 @@
-import { start } from "."
+import { assignTask, Flow, start } from "."
 import db from "../db"
 import { AppUser, JSMD } from "../JSMD"
 const jsmd: JSMD = {
@@ -35,7 +35,10 @@ jest.setTimeout(60 * 1000)
 describe("FlowDB", () => {
     test('start', async () => {
         await db()
-        const result = await start(jsmd, appUser, "start", {})
+        const result = <Flow>await start(jsmd, appUser, "start", {})
+
+        const step = await assignTask(result.id, { id: "tomas" }, 0, { id: "tomas" })
+
 
     })
 })
