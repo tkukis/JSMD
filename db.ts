@@ -23,7 +23,8 @@ export default function () {
             logging: false,
             entities
         }).then(async _ => {
-
+            await getRepository(Step).delete({})
+            await getRepository(Flow).delete({})
             //console.log("DB ready!")
 
             resolve(conn)

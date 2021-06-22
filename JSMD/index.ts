@@ -14,6 +14,7 @@ export interface Connector {
 export interface FlowElement {
     id: string,
     type: string,
+    flowStatus?: string,
     assignee?: string
     assigneeType: {
         id: string,
@@ -63,13 +64,25 @@ export function getNextElement(state: any, connectors: Array<Connector>, current
 export function getElementById(jsmd: JSMD, id: string) {
     return jsmd.elements.find(element => element.id === id)
 }
+export function getStatus(jsmd: JSMD, activeElementId: string | undefined) {
+    if (jsmd.steps.filter(s => s.type === "submit").length === 0) {
+        return "draft"
+    }
+    if (activeElementId) {
+        return getElementById(jsmd, activeElementId).flowStatus || "processing"
+    }
+    return "completed"
+}
+
 export function getActiveState(jsmd: JSMD) {
     const submits = jsmd.steps.filter(s => s.type === STEP_TYPE.submit)
-    return submits.reduce(function (total, current, i) {
+    const state = submits.reduce(function (total, current, i) {
         total.state[total.activeElementId] = { data: current.data, action: current.action }
         const next = getNextElement(total.state, jsmd.connectors, total.activeElementId)
         return { state: total.state, activeElementId: next }
     }, { state: {}, activeElementId: jsmd.elements[0].id })
+    const status = getStatus(jsmd, state.activeElementId)
+    return { ...state, status }
 }
 
 export interface GetTask {

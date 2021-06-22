@@ -9,16 +9,19 @@ const jsmd: JSMD = {
             {
                 id: "a",
                 type: "UserTask",
+                flowStatus: "returned",
                 assigneeType: { id: "admin" }
             },
             {
                 id: "b",
+                flowStatus: "review1",
                 type: "UserTask",
                 assigneeType: { id: "admin" }
             },
             {
                 id: "c",
                 type: "UserTask",
+                flowStatus: "review1",
                 assigneeType: { id: "admin" }
             },
         ],
