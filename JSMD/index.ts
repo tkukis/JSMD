@@ -11,7 +11,7 @@ export interface Connector {
     end: string
 }
 
-interface FlowElement {
+export interface FlowElement {
     id: string,
     type: string,
     assignee?: string
@@ -20,13 +20,15 @@ interface FlowElement {
         type?: string
     }
 }
+export interface Step {
+    type: string
+    data: any
+    action?: string
+    userId: string
+}
+
 export interface JSMD {
-    steps: Array<{
-        type: string,
-        data: any,
-        action?: string,
-        userId: string
-    }>,
+    steps: Array<Step>,
     elements: Array<FlowElement>,
     connectors: Array<Connector>
 }
@@ -100,7 +102,7 @@ export function assignTask(jsmd: JSMD, user: AppUser, taskIndex: number, assigne
 
     const flow: JSMD = JSON.parse(JSON.stringify(jsmd))
     const steps = flow.steps
-    flow.steps = [...steps, { userId: user.id, type: STEP_TYPE.assign, data: { id: assignee.id } }]
+    flow.steps = [...steps, { action: STEP_TYPE.assign, userId: user.id, type: STEP_TYPE.assign, data: { id: assignee.id } }]
     return flow
 
 }
