@@ -1,9 +1,10 @@
 import "reflect-metadata";
 import { createConnection, getRepository } from "typeorm";
+import { Flow, Step } from "./FlowDB";
 
 
-const itsTest = process.env.NODE_ENV === "test"
-const entities = []
+
+const entities = [Step, Flow]
 let connPromise
 export default function () {
     if (connPromise) {
@@ -14,7 +15,7 @@ export default function () {
         const conn = createConnection({
             type: "postgres",
             host: "localhost",
-            port: itsTest ? 5419 : 5419,
+            port: 5421,
             username: "admin",
             password: "a010o8h84pk67510o8h",
             database: "postgres",
@@ -22,8 +23,9 @@ export default function () {
             logging: false,
             entities
         }).then(async _ => {
-
-            console.log("DB ready!")
+            await getRepository(Step).delete({})
+            await getRepository(Flow).delete({})
+            //console.log("DB ready!")
 
             resolve(conn)
         }).catch(error => {

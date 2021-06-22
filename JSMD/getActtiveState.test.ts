@@ -14,10 +14,12 @@ const jsmd: JSMD = {
             {
                 id: "b",
                 type: "UserTask",
+                flowStatus: "review",
                 assigneeType: { id: "a" }
             },
             {
                 id: "c",
+                flowStatus: "review2",
                 type: "UserTask",
                 assigneeType: { id: "c" }
             },
@@ -96,6 +98,7 @@ describe("getTask", () => {
         //@ts-ignore
         const state = getActiveState(jsmd)
         expect(state.activeElementId).toBe("a")
+        expect(state.status).toBe("draft")
         expect(state.state).toStrictEqual({})
     })
     test('step b', async () => {
@@ -106,6 +109,7 @@ describe("getTask", () => {
             ]
         })
         expect(state.activeElementId).toBe("b")
+        expect(state.status).toBe("review")
         //   expect(state.state).toStrictEqual({})
     })
     test('step c', async () => {
@@ -117,6 +121,7 @@ describe("getTask", () => {
             ]
         })
         expect(state.activeElementId).toBe("c")
+        expect(state.status).toBe("review2")
         //   expect(state.state).toStrictEqual({})
     })
     test('ended', async () => {
@@ -129,6 +134,7 @@ describe("getTask", () => {
             ]
         })
         expect(state.activeElementId).toBe(undefined)
+        expect(state.status).toBe("completed")
         //   expect(state.state).toStrictEqual({})
     })
     test('simpleCondition', async () => {

@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+  postgres-test:
+    container_name: jsmd-test
+    image: postgres:latest
+    restart: always
+    expose:
+      - 5421
+    ports:
+      - 5421:5432
+    environment:
+      POSTGRES_PASSWORD: "a010o8h84pk67510o8h"
+      POSTGRES_USER: "admin"
+ 
