@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "dev": "NODE_ENV=test ts-node --project tsconfig.server.json test.ts",
     "test": "NODE_ENV=test jest",
     "test:watch": "NODE_ENV=test npx jest --watch"
