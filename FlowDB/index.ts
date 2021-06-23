@@ -22,6 +22,8 @@ export class Step implements JSMDStep {
 export class Flow implements JSMD {
     @PrimaryGeneratedColumn()
     id: string
+    @Column()
+    type: string
     @OneToMany(() => Step, step => step.flow)
     steps: Array<JSMDStep>
     @Column({ type: "json" })
@@ -32,7 +34,7 @@ export class Flow implements JSMD {
     status: ActiveState
 }
 
-export async function start(jsmd: JSMD, appUser: AppUser, action: string, data: any): Promise<Flow | string> {
+export async function start(jsmd: JSMD, type: string, appUser: AppUser, action: string, data: any): Promise<Flow | string> {
 
     const flow = jAssignTask(jsmd, appUser, 0, appUser)
     if (typeof flow === "string") {
@@ -54,6 +56,7 @@ export async function start(jsmd: JSMD, appUser: AppUser, action: string, data: 
         }))
         const newFlow = new Flow()
         newFlow.steps = steps
+        newFlow.type = type
         newFlow.connectors = startedFlow.connectors
         newFlow.elements = startedFlow.elements
         newFlow.status = getActiveState(startedFlow)

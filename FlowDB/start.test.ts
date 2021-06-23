@@ -35,7 +35,7 @@ jest.setTimeout(60 * 1000)
 describe("FlowDB", () => {
     test('start', async () => {
         await db()
-        const result = <Flow>await start(jsmd, appUser, "start", {})
+        const result = <Flow>await start(jsmd, "test", appUser, "start", {})
 
         const step = await assignTask(result.id, { id: "tomas" }, 0, { id: "tomas" })
 
