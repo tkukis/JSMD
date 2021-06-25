@@ -15,6 +15,8 @@ export class Task {
     assigneeId?: string
     @Column({ type: "json", nullable: true })
     completedState?: ActiveState
+    @Column({ type: "json", nullable: true })
+    element: FlowElement
 }
 
 
@@ -83,6 +85,7 @@ export async function start(jsmd: JSMD, type: string, appUser: AppUser, action: 
             const dbTask = new Task()
             dbTask.flow = newFlow
             dbTask.taskID = task.id
+            dbTask.element = task.element
             await getRepository(Task).save(dbTask)
         }
         return newFlow
@@ -139,6 +142,7 @@ export async function submitTask(flowId: string, userId, taskId: number, data: a
         const newTask = new Task()
         newTask.taskID = task.id
         newTask.flow = flow
+        newTask.element = task.element
         await getRepository(Task).save(newTask)
     }
 
