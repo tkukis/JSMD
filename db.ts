@@ -1,10 +1,10 @@
 import "reflect-metadata";
 import { createConnection, getRepository } from "typeorm";
-import { Flow, Step } from "./FlowDB";
+import { Flow, Step, Task } from "./FlowDB";
 
 
 
-const entities = [Step, Flow]
+const entities = [Step, Flow, Task]
 let connPromise
 export default function () {
     if (connPromise) {
@@ -24,12 +24,15 @@ export default function () {
             entities
         }).then(async _ => {
             await getRepository(Step).delete({})
+            await getRepository(Task).delete({})
             await getRepository(Flow).delete({})
+
             //console.log("DB ready!")
 
             resolve(conn)
         }).catch(error => {
             console.log(error)
+            reject(error)
         });
     })
     return connPromise

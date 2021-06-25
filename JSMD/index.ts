@@ -118,8 +118,15 @@ export enum AssigneType {
     permission = "permission"
 }
 export function assignTask(jsmd: JSMD, user: AppUser, taskIndex: number, assignee: AppUser): JSMD | string {
-
+    const task = getTask(jsmd)
+    if (!task) {
+        return submitTask_ERRORS.FLOW_IS_OVER
+    }
+    if (task.id !== taskIndex) {
+        return submitTask_ERRORS.TASK_IS_OVER
+    }
     const flow: JSMD = JSON.parse(JSON.stringify(jsmd))
+
     const steps = flow.steps
     flow.steps = [...steps, { action: STEP_TYPE.assign, userId: user.id, type: STEP_TYPE.assign, data: { id: assignee.id } }]
     return flow
