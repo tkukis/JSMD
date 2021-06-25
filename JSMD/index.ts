@@ -117,7 +117,7 @@ export function getTask(jsmd: JSMD): GetTask | void {
 export enum AssigneType {
     permission = "permission"
 }
-export function assignTask(jsmd: JSMD, user: AppUser, taskIndex: number, assignee: AppUser): JSMD | string {
+export function assignTask(jsmd: JSMD, user: AppUser, taskIndex: number, assignee?: AppUser): JSMD | string {
     const task = getTask(jsmd)
     if (!task) {
         return submitTask_ERRORS.FLOW_IS_OVER
@@ -128,7 +128,7 @@ export function assignTask(jsmd: JSMD, user: AppUser, taskIndex: number, assigne
     const flow: JSMD = JSON.parse(JSON.stringify(jsmd))
 
     const steps = flow.steps
-    flow.steps = [...steps, { action: STEP_TYPE.assign, userId: user.id, type: STEP_TYPE.assign, data: { id: assignee.id } }]
+    flow.steps = [...steps, { action: STEP_TYPE.assign, userId: user.id, type: STEP_TYPE.assign, data: { id: assignee?.id } }]
     return flow
 
 }

@@ -92,7 +92,7 @@ export async function start(jsmd: JSMD, type: string, appUser: AppUser, action: 
     }
 }
 
-export async function assignTask(flowId: string, user: AppUser, taskIndex: number, assignee: AppUser) {
+export async function assignTask(flowId: string, user: AppUser, taskIndex: number, assignee?: AppUser) {
     const flow = await getRepository(Flow).findOne(flowId, { relations: ["steps"] })
     if (!flow) {
         return "n.a."
@@ -103,7 +103,7 @@ export async function assignTask(flowId: string, user: AppUser, taskIndex: numbe
     }
     const task = await getRepository(Task).findOne({ where: { taskID: taskIndex, flow: { id: flowId } } })
     if (task) {
-        task.assigneeId = assignee.id
+        task.assigneeId = assignee?.id
         getRepository(Task).save(task)
     }
     return await saveNewStep(assignedFlow, flow);
