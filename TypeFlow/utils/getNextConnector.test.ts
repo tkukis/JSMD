@@ -8,5 +8,6 @@ describe("getNextConnector", () => {
         expect(getNextConnector({}, [{ start: "a", end: "b", condition: "{{it.state.a.b===100}}" }], "a")?.end).toBe(undefined)
         expect(getNextConnector({ state: { a: { b: 100 } } }, [{ start: "a", end: "b", condition: "{{it.state.a.b===100}}" }], "a")?.end).toBe("b")
         expect(getNextConnector({ state: { a: { b: 100 } } }, [{ start: "a", end: "b", condition: "{{it.state.a.b===101}}" }], "a")?.end).toBe(undefined)
+
     })
 })
