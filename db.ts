@@ -1,10 +1,11 @@
 import "reflect-metadata";
 import { createConnection, getRepository } from "typeorm";
 import { Flow, Step, Task } from "./FlowDB";
+import { TAppUser, TFlow, TStep } from "./TypeFlow/models/TFlow";
 
 
 
-const entities = [Step, Flow, Task]
+const entities = [Step, Flow, Task, TFlow, TStep, TAppUser]
 let connPromise
 export default function () {
     if (connPromise) {
@@ -26,8 +27,20 @@ export default function () {
             await getRepository(Step).delete({})
             await getRepository(Task).delete({})
             await getRepository(Flow).delete({})
+            await getRepository(TStep).delete({})
+            await getRepository(TFlow).delete({})
+            const users = await getRepository(TAppUser).find()
+            if (users.length === 0) {
+                const Tomas = new TAppUser
+                Tomas.id = "tomas"
+                Tomas.permissions = ["admin"]
+                const Jonas = new TAppUser
+                Jonas.id = "jonas"
+                Jonas.permissions = [""]
+                await getRepository(TAppUser).save(Tomas)
+                await getRepository(TAppUser).save(Jonas)
+            }
 
-            //console.log("DB ready!")
 
             resolve(conn)
         }).catch(error => {
