@@ -46,7 +46,6 @@ export function decide(expr: string, state: any) {
     } catch (error) {
         return false
     }
-
 }
 export function getNextElement(state: any, connectors: Array<Connector>, currentElementId: string): string | undefined {
     const candidates = connectors.filter(c => c.start === currentElementId)
