@@ -45,6 +45,12 @@ export class TTask {
         await getRepository(TFlow).save(this.flow)
     }
     async submit(appUser: AppUser, data: any, action: string) {
+        if (!this.assignee) {
+            return "You must assign at first"
+        }
+        if (this.assignee !== appUser.id) {
+            return "Wrong assignee"
+        }
         const flow = await getRepository(TFlow).findOne(this.flow.id)
         const submittedFlow = await flow.submit(appUser, data, action, this.id)
         if (typeof submittedFlow !== "string") {
